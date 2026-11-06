@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7f4" />
+    <meta
+      name="description"
+      content="Create, customize, and download beautiful QR codes. Free, private, and made entirely in your browser."
+    />
+    <title>QR Studio — A little code. Endless possibilities.</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="QR Studio home"
+        ><span class="brand-mark" aria-hidden="true"
+          ><i></i><i></i><i></i><i></i></span
+        >qr<span class="brand-light">studio</span
+        ><span class="brand-dot">®</span></a
+      >
+      <nav aria-label="Main navigation">
+        <a class="nav-active" href="#create">Create a code</a
+        ><a href="#history">Saved codes <span id="nav-count">0</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro" id="create">
+        <h1>Make the connection<span>.</span></h1>
+      </section>
+
+      <div class="workspace">
+        <div class="editor">
+          <section class="panel content-panel" aria-labelledby="content-title">
+            <div class="section-heading">
+              <span class="step">01</span>
+              <h2 id="content-title">Choose your content</h2>
+            </div>
+            <div class="type-tabs" role="tablist" aria-label="QR code type">
+              <button
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="url-panel"
+                id="url-tab"
+                data-type="url"
+              >
+                Website
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="text-panel"
+                id="text-tab"
+                data-type="text"
+                tabindex="-1"
+              >
+                <span aria-hidden="true">Tt</span> Text
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="contact-panel"
+                id="contact-tab"
+                data-type="contact"
+                tabindex="-1"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="4" y="3" width="16" height="18" rx="3" />
+                  <circle cx="12" cy="9" r="2" />
+                  <path d="M8 17c0-4 8-4 8 0" />
+                </svg>
+                Contact
+              </button>
+            </div>
+            <form id="content-form" novalidate>
+              <div id="url-panel" role="tabpanel" aria-labelledby="url-tab">
+                <label for="url">Website URL</label>
+                <input
+                  id="url"
+                  name="url"
+                  type="url"
+                  placeholder="https://your-website.com"
+                  value="https://example.com"
+                  maxlength="1800"
+                  aria-describedby="url-help"
+                />
+                <p class="field-help" id="url-help">
+                  Where would you like your QR code to take people?
+                </p>
+              </div>
+              <div
+                id="text-panel"
+                role="tabpanel"
+                aria-labelledby="text-tab"
+                hidden
+              >
+                <label for="text">Your message</label
+                ><textarea
+                  id="text"
+                  name="text"
+                  rows="4"
+                  maxlength="1200"
+                  placeholder="A thought, a note, a little something to share…"
+                ></textarea>
+                <p class="field-help">
+                  Up to 1,200 characters; fewer for emoji. Shorter messages scan
+                  more easily.
+                </p>
+              </div>
+              <div
+                id="contact-panel"
+                role="tabpanel"
+                aria-labelledby="contact-tab"
+                hidden
+              >
+                <div class="field-grid">
+                  <div>
+                    <label for="firstName">First name</label
+                    ><input
+                      id="firstName"
+                      name="firstName"
+                      maxlength="80"
+                      autocomplete="given-name"
+                      placeholder="Alex"
+                    />
+                  </div>
+                  <div>
+                    <label for="lastName">Last name</label
+                    ><input
+                      id="lastName"
+                      name="lastName"
+                      maxlength="80"
+                      autocomplete="family-name"
+                      placeholder="Morgan"
+                    />
+                  </div>
+                </div>
+                <label for="organization"
+                  >Organization <span class="optional">optional</span></label
+                ><input
+                  id="organization"
+                  name="organization"
+                  maxlength="100"
+                  autocomplete="organization"
+                  placeholder="Studio, company, or team"
+                />
+                <div class="field-grid">
+                  <div>
+                    <label for="email"
+                      >Email <span class="optional">optional</span></label
+                    ><input
+                      id="email"
+                      name="email"
+                      type="email"
+                      maxlength="150"
+                      autocomplete="email"
+                      placeholder="alex@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label for="phone"
+                      >Phone <span class="optional">optional</span></label
+                    ><input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      maxlength="40"
+                      autocomplete="tel"
+                      placeholder="+1 555 123 4567"
+                    />
+                  </div>
+                </div>
+                <label for="website"
+                  >Website <span class="optional">optional</span></label
+                ><input
+                  id="website"
+                  name="website"
+                  type="url"
+                  maxlength="250"
+                  placeholder="https://your-website.com"
+                />
+                <p class="field-help">
+                  A digital contact card, ready to add to an address book.
+                </p>
+              </div>
+            </form>
+            <p
+              id="content-error"
+              class="error-message"
+              role="status"
+              hidden
+            ></p>
+          </section>
+
+          <section
+            class="panel customize-panel"
+            aria-labelledby="customize-title"
+          >
+            <div class="section-heading">
+              <span class="step">02</span>
+              <h2 id="customize-title">Make it yours</h2>
+              <button id="reset-style" class="text-button" type="button">
+                Reset
+              </button>
+            </div>
+            <div class="field-grid color-grid">
+              <div>
+                <label for="foreground">Code color</label>
+                <div class="color-field">
+                  <input type="color" id="foreground" value="#213d32" /><span
+                    id="foreground-value"
+                    >#213D32</span
+                  ><span class="color-arrow" aria-hidden="true">⌄</span>
+                </div>
+              </div>
+              <div>
+                <label for="background">Background</label>
+                <div class="color-field">
+                  <input type="color" id="background" value="#ffffff" /><span
+                    id="background-value"
+                    >#FFFFFF</span
+                  ><span class="color-arrow" aria-hidden="true">⌄</span>
+                </div>
+              </div>
+            </div>
+            <label id="style-label">Code style</label>
+            <div
+              class="style-options"
+              role="group"
+              aria-labelledby="style-label"
+            >
+              <button type="button" data-style="square" aria-pressed="false">
+                <span
+                  class="style-pattern square-pattern"
+                  aria-hidden="true"
+                ></span
+                >Classic
+              </button>
+              <button type="button" data-style="rounded" aria-pressed="true">
+                <span
+                  class="style-pattern rounded-pattern"
+                  aria-hidden="true"
+                ></span
+                >Rounded
+              </button>
+              <button type="button" data-style="dots" aria-pressed="false">
+                <span
+                  class="style-pattern dots-pattern"
+                  aria-hidden="true"
+                ></span
+                >Dots
+              </button>
+            </div>
+            <label for="logo"
+              >Center logo <span class="optional">optional</span></label
+            >
+            <div class="upload-zone" id="upload-zone">
+              <span class="upload-icon" aria-hidden="true">↑</span>
+              <div>
+                <span id="logo-label">Give your code a personal touch</span
+                ><small>PNG, JPG or WebP · up to 1 MB</small>
+              </div>
+              <label class="upload-button" for="logo"
+                >Upload logo<input
+                  id="logo"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp" /></label
+              ><button
+                id="remove-logo"
+                class="text-button"
+                type="button"
+                hidden
+              >
+                Remove
+              </button>
+            </div>
+            <p class="field-help" id="logo-feedback" role="status"></p>
+          </section>
+        </div>
+
+        <aside class="preview-panel" aria-labelledby="preview-title">
+          <div class="preview-heading">
+            <h2 id="preview-title">Your QR code</h2>
+            <span class="live-badge"><span></span> LIVE PREVIEW</span>
+          </div>
+          <div class="preview-stage">
+            <span class="stage-cross top-left" aria-hidden="true">+</span
+            ><span class="stage-cross bottom-right" aria-hidden="true">+</span>
+            <div class="qr-paper">
+              <div
+                id="qr-preview"
+                role="img"
+                aria-label="Generated QR code"
+              ></div>
+              <div id="preview-empty" hidden>
+                <span aria-hidden="true">▦</span>
+                <p>Add your content<br />to create a code</p>
+              </div>
+            </div>
+          </div>
+          <div class="preview-details">
+            <span id="type-caption">WEBSITE</span
+            ><span id="size-caption">1024 × 1024 px</span>
+          </div>
+          <p id="scan-status" class="scan-status" role="status">
+            <span aria-hidden="true">✓</span> Ready to scan
+          </p>
+          <div class="export-options">
+            <label for="size">Export size</label
+            ><select id="size">
+              <option value="512">512 × 512 px</option>
+              <option value="1024" selected>1024 × 1024 px</option>
+              <option value="2048">2048 × 2048 px</option>
+            </select>
+          </div>
+          <div class="download-buttons">
+            <button class="primary-button" id="download-png" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+              </svg>
+              Download PNG</button
+            ><button class="secondary-button" id="download-svg" type="button">
+              SVG <span aria-hidden="true">↓</span>
+            </button>
+          </div>
+          <button class="save-button" id="save-code" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 3h12v18l-6-4-6 4z" />
+            </svg>
+            Save to my codes
+          </button>
+        </aside>
+      </div>
+
+      <section
+        class="history-section"
+        id="history"
+        aria-labelledby="history-title"
+      >
+        <div class="history-heading">
+          <div>
+            <div class="history-title-line">
+              <h2 id="history-title">Your collection</h2>
+              <span id="history-count">0 codes</span>
+            </div>
+          </div>
+          <span class="storage-note"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="5" y="10" width="14" height="11" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            Saved on this device</span
+          >
+        </div>
+        <p class="history-privacy">
+          Saved codes include their content and logos. Save only on a trusted
+          device.
+        </p>
+        <div id="history-list" class="history-list"></div>
+        <div class="history-empty" id="history-empty">
+          <span class="empty-collection-icon" aria-hidden="true">▦</span>
+          <div>
+            <h3>A home for your next connection</h3>
+            <p>Save a QR code and it’ll be waiting right here.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="footer-brand" href="#create">qr<span>studio</span></a>
+      <span>100% browser-based</span>
+    </footer>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
