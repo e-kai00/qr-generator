@@ -118,7 +118,7 @@ async function renderPreview(version) {
     $("preview-empty").hidden = true;
     $("scan-status").classList.remove("invalid");
     $("scan-status").textContent = isSample
-      ? "Sample: e-kai00.github.io/qr-generator/ · Add your content to create a code."
+      ? "Add your content to create a code."
       : saved.settings.logo
         ? "✓ Ready to scan · test your logo before sharing"
         : "✓ Ready to scan";
