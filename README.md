@@ -1,4 +1,4 @@
-# QR Studio
+# qode
 
 A responsive QR code generator built with plain HTML, CSS, and JavaScript. Everything runs in the browser: no backend, account, database, or paid QR service.
 
@@ -28,7 +28,7 @@ The preview updates automatically after a short typing delay. Empty or invalid c
 
 ## Saved data and privacy
 
-- History is stored in `localStorage` under `qr-studio.history.v1`. Nothing is sent to a server for QR generation, image processing, or storage.
+- History is stored in `localStorage` under `qr-studio.history.v1` (the original key is retained so existing saved codes stay available). Nothing is sent to a server for QR generation, image processing, or storage.
 - Saving is explicit. Unsaved form changes are not persisted. Only the selected content type is saved; fields from other tabs are excluded.
 - A collection holds up to 24 codes. A full collection or unavailable/full browser storage produces a message; the app does not silently discard old codes.
 - Saved contact details are readable in browser storage. Save them only on a trusted device. The thumbnails also encode the saved data.
@@ -42,25 +42,6 @@ The app uses error correction level **H**, square finder markers, dark-on-light 
 Content is capped at **1,200 UTF-8 bytes**, including vCard formatting. Emoji and many non-Latin characters use more than one byte. Shorter content creates less dense, easier-to-scan codes. Use the larger PNG sizes or SVG for dense codes and print work. Do not crop the surrounding blank border.
 
 “Ready to scan” means the content and style checks passed; it is not a decoder verification. Always test the downloaded code with a phone camera before sharing or printing, especially after adding a logo. Actual scanning also depends on print size, lighting, the logo, and the scanner. Logos inside SVG exports are embedded raster images; the QR modules remain vector graphics.
-
-## Architecture and files
-
-```text
-qr-generator/
-├── index.html             # Accessible page structure, forms, and preview
-├── public/
-│   └── favicon.svg        # Small local brand icon
-├── src/
-│   ├── main.js            # UI events, live rendering, upload, export, history
-│   ├── qr-data.js         # Validation, vCard encoding, storage parsing
-│   └── style.css          # Responsive layout and visual styling
-├── tests/
-│   └── qr-data.test.js    # Native Node tests for payload and storage logic
-├── package.json           # Dependencies and development commands
-└── .gitignore             # Excludes dependencies and generated output
-```
-
-The UI takes a snapshot of the active content and customization, validates it, and passes it to `qr-code-styling`. A small UTF-8 adapter preserves international text in the library’s byte encoder; its internal `qrcode-generator` dependency is pinned to 1.4.4 to keep that behavior predictable. Every edit invalidates the previous preview immediately. Generation uses a version counter to prevent a slower earlier render from replacing newer content. Downloads and saves capture the validated snapshot. Logos are decoded and re-encoded locally as small PNGs before use. Saved content is inserted using `textContent`, and restored storage data is checked before use.
 
 ### Dependencies
 
@@ -86,7 +67,3 @@ node --check src/qr-data.js
 `npm run build` creates **dist/**. Serve that folder with any static web host. `npm run preview` serves the built app locally, usually on port 4173; it is a local verification server, not a production backend.
 
 Recommended browser checks after installation: generate and scan each content type; try all three styles and a logo; open the PNG/SVG exports; save, reload, reopen, and delete history; try blank inputs, low-contrast colors, an invalid logo, and a mobile-width screen.
-
-### Verification in the implementation environment
-
-All seven payload/storage tests, both JavaScript syntax checks, and the production build passed. Browser and scan checks have not been completed here; use the browser checklist above to verify those behaviors.

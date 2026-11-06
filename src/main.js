@@ -289,7 +289,7 @@ async function download(extension) {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `qr-studio-${active.saved.type}.${extension}`;
+    anchor.download = `qode-${active.saved.type}.${extension}`;
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
