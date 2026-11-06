@@ -5,7 +5,7 @@ import {
   EMPTY_FIELDS,
   TYPES,
   TYPE_LABELS,
-  buildPayload,
+  previewContent,
   validateColors,
   codeTitle,
   readHistory,
@@ -94,8 +94,9 @@ function qrOptions(data, settings, size = 512) {
 async function renderPreview(version) {
   const saved = snapshot();
   let data;
+  let isSample;
   try {
-    data = buildPayload(saved.type, saved.fields);
+    ({ data, isSample } = previewContent(saved.type, saved.fields));
   } catch (error) {
     if (version === generation) showError(error.message, true);
     return;
@@ -108,13 +109,22 @@ async function renderPreview(version) {
     if (version !== generation) return;
     $("qr-preview").replaceChildren();
     qr.append($("qr-preview"));
-    currentQR = { qr, data, saved, version };
+    // The sample is preview-only; saving and exporting require the user's content.
+    currentQR = isSample ? null : { qr, data, saved, version };
+    $("qr-preview").setAttribute(
+      "aria-label",
+      isSample ? "Sample QR code for the qode website" : "Generated QR code",
+    );
     $("preview-empty").hidden = true;
     $("scan-status").classList.remove("invalid");
-    $("scan-status").textContent = saved.settings.logo
-      ? "✓ Ready to scan · test your logo before sharing"
-      : "✓ Ready to scan";
-    $("type-caption").textContent = TYPE_LABELS[saved.type].toUpperCase();
+    $("scan-status").textContent = isSample
+      ? "Sample: e-kai00.github.io/qr-generator/ · Add your content to create a code."
+      : saved.settings.logo
+        ? "✓ Ready to scan · test your logo before sharing"
+        : "✓ Ready to scan";
+    $("type-caption").textContent = isSample
+      ? "SAMPLE · WEBSITE"
+      : TYPE_LABELS[saved.type].toUpperCase();
     $("size-caption").textContent =
       `${saved.settings.size} × ${saved.settings.size} px`;
     updateActions();

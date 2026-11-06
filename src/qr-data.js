@@ -13,7 +13,7 @@ export const TYPE_LABELS = {
   contact: "Contact",
 };
 export const EMPTY_FIELDS = Object.freeze({
-  url: "https://example.com",
+  url: "",
   text: "",
   firstName: "",
   lastName: "",
@@ -94,6 +94,28 @@ export function buildPayload(type, fields) {
       "This content is too long. Keep the encoded content under 1,200 UTF-8 bytes (fewer for emoji and accented text).",
     );
   return data;
+}
+
+export function previewContent(type, fields) {
+  const keys = {
+    url: ["url"],
+    text: ["text"],
+    contact: [
+      "firstName",
+      "lastName",
+      "organization",
+      "email",
+      "phone",
+      "website",
+    ],
+  }[type];
+  const isSample = Boolean(keys) && keys.every((key) => !fields[key].trim());
+  return {
+    data: isSample
+      ? "https://e-kai00.github.io/qr-generator/"
+      : buildPayload(type, fields),
+    isSample,
+  };
 }
 
 export function luminance(hex) {

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildPayload,
+  previewContent,
   DEFAULT_SETTINGS,
   EMPTY_FIELDS,
   readHistory,
@@ -11,6 +12,44 @@ import {
   toQRBytes,
 } from "../src/qr-data.js";
 const fields = (changes) => ({ ...EMPTY_FIELDS, ...changes });
+
+test("empty forms show a sample without pre-filling any inputs", () => {
+  for (const type of ["url", "text", "contact"]) {
+    const input = fields({});
+    assert.deepEqual(previewContent(type, input), {
+      data: "https://e-kai00.github.io/qr-generator/",
+      isSample: true,
+    });
+    assert.deepEqual(input, EMPTY_FIELDS);
+  }
+  assert.equal(previewContent("url", fields({ url: "  " })).isSample, true);
+  assert.equal(previewContent("text", fields({ text: "\n " })).isSample, true);
+});
+
+test("entered content replaces the sample and invalid content still raises errors", () => {
+  assert.deepEqual(
+    previewContent("url", fields({ url: "https://example.org/" })),
+    {
+      data: "https://example.org/",
+      isSample: false,
+    },
+  );
+  assert.deepEqual(previewContent("text", fields({ text: "My message" })), {
+    data: "My message",
+    isSample: false,
+  });
+  const contact = fields({ firstName: "Alex" });
+  assert.deepEqual(previewContent("contact", contact), {
+    data: buildPayload("contact", contact),
+    isSample: false,
+  });
+  assert.throws(() => previewContent("url", fields({ url: "invalid" })), /URL/);
+  assert.throws(
+    () => previewContent("contact", fields({ email: "alex@example.com" })),
+    /name/,
+  );
+  assert.throws(() => previewContent("unknown", fields({})), /type/);
+});
 
 test("UTF-8 bytes preserve emoji, accented contacts, and non-Latin text", () => {
   for (const text of ["Hello 🌿", "Grüße aus Köln", "東京", "مرحبا"]) {

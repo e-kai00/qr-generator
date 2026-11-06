@@ -8,6 +8,7 @@
   --text-primary: #3e5649;
   --text-secondary: #4e4f4d;
   --text-inverse: #ffffff;
+  --text-placeholder: #a5aba7;
 
   font-family: "DM Sans", sans-serif;
   font-size: var(--font-size-md);
@@ -294,7 +295,7 @@ select {
 }
 input::placeholder,
 textarea::placeholder {
-  color: var(--text-secondary);
+  color: var(--text-placeholder);
   opacity: 1;
 }
 input:focus,
